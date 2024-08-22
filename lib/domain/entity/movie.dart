@@ -6,15 +6,19 @@ class MovieResult {
 
   MovieResult({
     this.page,
+    this.results,
     this.totalPages,
     this.totalResults,
-    this.results,
   });
 
   factory MovieResult.fromMap(Map json) {
     return MovieResult(
       page: json['page'],
-      results: json['results'],
+      results: (json['results'] as List<dynamic>)
+          .map(
+            (e) => Movie.fromMap(e as Map<String, dynamic>),
+          )
+          .toList(),
       totalPages: json['total_pages'],
       totalResults: json['total_results'],
     );
