@@ -1,3 +1,5 @@
+import 'package:app_movie/data/usecase/remote_load_movies.dart';
+import 'package:app_movie/ui/components/carousel.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -8,13 +10,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<String> listaTeste = [
-    'https://upload.wikimedia.org/wikipedia/en/b/b4/At-the-movies.jpg',
-    'https://greenhouse.hulu.com/app/uploads/sites/11/MazeRunner_Hulu_600x338_cp.jpg',
-    'https://upload.wikimedia.org/wikipedia/en/b/b4/At-the-movies.jpg',
-    'https://upload.wikimedia.org/wikipedia/en/b/b4/At-the-movies.jpg',
-    'https://upload.wikimedia.org/wikipedia/en/b/b4/At-the-movies.jpg',
-  ];
+  RemoteLoadMovies remoteLoadMovies = RemoteLoadMovies();
 
   @override
   Widget build(BuildContext context) {
@@ -28,33 +24,19 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: Column(
-        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
-            children: [
-              Text(
-                'Novelas',
-                style: TextStyle(fontSize: 25),
-              ),
-            ],
-          ),
-          Container(
-            width: double.infinity,
-            height: 250,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: listaTeste.length,
-                itemBuilder: (BuildContext _, int index) {
-                  return Container(
-                    width: 150,
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Image.network(
-                      listaTeste[index],
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                    ),
-                  );
-                }),
+          FutureBuilder(
+            future: remoteLoadMovies.load(),
+            builder: (context, snapshot) {
+              final movies = snapshot.data?.results;
+              return Carousel(
+                carouselTitle: 'Filmes',
+                movies: movies ?? [],
+                onNavigate: () {
+                  print('Card clicado');
+                },
+              );
+            },
           ),
         ],
       ),

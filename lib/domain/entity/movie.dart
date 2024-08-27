@@ -43,4 +43,8 @@ class Movie {
       title: json['title'],
     );
   }
+
+  String get fullImageUrl {
+    return 'https://image.tmdb.org/t/p/w400${posterPath ?? ''}';
+  }
 }
