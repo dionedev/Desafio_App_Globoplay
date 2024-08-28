@@ -1,3 +1,4 @@
+import 'package:app_movie/ui/modules/details/details_page.dart';
 import 'package:app_movie/ui/modules/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,6 +36,7 @@ class _MovieAppState extends State<MovieApp> {
       routes: {
         '/splash': (context) => const SplashPage(),
         '/home': (context) => const HomePage(),
+        '/details': (context) => const DetailsPage(),
       },
     );
   }

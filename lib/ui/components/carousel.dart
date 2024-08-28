@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class Carousel extends StatefulWidget {
   final String carouselTitle;
   final List<String> items;
-
   final void Function() onNavigate;
 
   const Carousel({
@@ -17,7 +16,7 @@ class Carousel extends StatefulWidget {
   State<Carousel> createState() => _CarouselState();
 }
 
-class _CarouselState<T> extends State<Carousel> {
+class _CarouselState extends State<Carousel> {
   @override
   Widget build(BuildContext context) {
     return Column(

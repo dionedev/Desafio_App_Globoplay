@@ -3,8 +3,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 class RemoteNovelLoading {
-  load() async {
-    final url = Uri.parse('https://api.themoviedb.org/3/discover/tv');
+  Future<NovelResult?> load() async {
+    final url = Uri.parse(
+        'https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=1&sort_by=popularity.desc');
     final response = await http.get(url, headers: {
       'Authorization':
           'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3MTUwNGI0YjY0OGMwMGUwNGZlMDUzYWY2YmYxZTI5OCIsIm5iZiI6MTcyNDc4NDU0MC4wNjExMjcsInN1YiI6IjY2YzUxMjZlNDZkYzkyN2M3ZGQxMGY1YiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.aeLhZvi68tjy9GXLbocXdhEC9t8NZ9bd561JqVPEylc'
@@ -12,7 +13,7 @@ class RemoteNovelLoading {
 
     if (response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body) as Map;
-      return Novel.fromMap(jsonResponse);
+      return NovelResult.fromMap(jsonResponse);
     } else {
       return null;
     }

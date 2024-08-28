@@ -1,4 +1,5 @@
 import 'package:app_movie/data/usecase/remote_load_movies.dart';
+import 'package:app_movie/data/usecase/remote_novel_loading.dart';
 import 'package:app_movie/ui/components/carousel.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +12,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   RemoteLoadMovies remoteLoadMovies = RemoteLoadMovies();
+  RemoteNovelLoading remoteNovelLoading = RemoteNovelLoading();
 
   @override
   Widget build(BuildContext context) {
@@ -23,22 +25,57 @@ class _HomePageState extends State<HomePage> {
           width: 150,
         ),
       ),
-      body: Column(
-        children: [
-          FutureBuilder(
-            future: remoteLoadMovies.load(),
-            builder: (context, snapshot) {
-              final movies = snapshot.data?.results;
-              return Carousel(
-                carouselTitle: 'Filmes',
-                movies: movies ?? [],
-                onNavigate: () {
-                  print('Card clicado');
+      backgroundColor: const Color.fromRGBO(14, 14, 14, 1),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 30),
+          child: Column(
+            children: [
+              FutureBuilder(
+                future: remoteLoadMovies.load(),
+                builder: (context, snapshot) {
+                  final movies = snapshot.data?.results;
+                  return Carousel(
+                    carouselTitle: 'Filmes',
+                    items:
+                        movies?.map((item) => item.fullImageUrl).toList() ?? [],
+                    onNavigate: () {
+                      Navigator.pushNamed(context, '/details');
+                    },
+                  );
                 },
-              );
-            },
+              ),
+              FutureBuilder(
+                future: remoteNovelLoading.load(),
+                builder: (context, snapshot) {
+                  final movies = snapshot.data?.results;
+                  return Carousel(
+                    carouselTitle: 'Novelas',
+                    items:
+                        movies?.map((item) => item.fullImageUrl).toList() ?? [],
+                    onNavigate: () {
+                      Navigator.pushNamed(context, '/details');
+                    },
+                  );
+                },
+              ),
+              FutureBuilder(
+                future: remoteNovelLoading.load(),
+                builder: (context, snapshot) {
+                  final movies = snapshot.data?.results;
+                  return Carousel(
+                    carouselTitle: 'Novelas',
+                    items:
+                        movies?.map((item) => item.fullImageUrl).toList() ?? [],
+                    onNavigate: () {
+                      Navigator.pushNamed(context, '/details');
+                    },
+                  );
+                },
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
