@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Carousel extends StatefulWidget {
   final String carouselTitle;
   final List<String> items;
-  final void Function() onNavigate;
+  final void Function(int index) onNavigate;
 
   const Carousel({
     super.key,
@@ -42,7 +42,9 @@ class _CarouselState extends State<Carousel> {
             itemBuilder: (buildContext, index) {
               final item = widget.items[index];
               return GestureDetector(
-                onTap: widget.onNavigate,
+                onTap: () {
+                  widget.onNavigate(index);
+                },
                 child: Container(
                   width: 150,
                   margin: const EdgeInsets.symmetric(horizontal: 8),

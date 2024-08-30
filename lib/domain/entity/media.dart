@@ -1,22 +1,22 @@
-class NovelResult {
+class MediaResult {
   final int? page;
   final int? totalPages;
   final int? totalResults;
-  final List<Novel>? results;
+  final List<Media>? results;
 
-  NovelResult({
+  MediaResult({
     this.page,
     this.results,
     this.totalPages,
     this.totalResults,
   });
 
-  factory NovelResult.fromMap(Map json) {
-    return NovelResult(
+  factory MediaResult.fromMap(Map json) {
+    return MediaResult(
       page: json['page'],
       results: (json['results'] as List<dynamic>)
           .map(
-            (e) => Novel.fromMap(e as Map<String, dynamic>),
+            (e) => Media.fromMap(e as Map<String, dynamic>),
           )
           .toList(),
       totalPages: json['total_pages'],
@@ -25,7 +25,7 @@ class NovelResult {
   }
 }
 
-class Novel {
+class Media {
   final String? name;
   final String? originalName;
   final String? overview;
@@ -34,7 +34,7 @@ class Novel {
   final String? backdropPath;
   final String? posterPath;
 
-  Novel({
+  Media({
     this.name,
     this.originalName,
     this.overview,
@@ -44,8 +44,8 @@ class Novel {
     this.posterPath,
   });
 
-  factory Novel.fromMap(Map json) {
-    return Novel(
+  factory Media.fromMap(Map json) {
+    return Media(
       name: json['name'],
       originalName: json['original_name'],
       overview: json['overview'],

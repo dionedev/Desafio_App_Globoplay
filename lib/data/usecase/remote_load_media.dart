@@ -1,9 +1,9 @@
-import 'package:app_movie/domain/entity/novel.dart';
+import 'package:app_movie/domain/entity/media.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-class RemoteNovelLoading {
-  Future<NovelResult?> load() async {
+class RemoteLoadMedia {
+  Future<MediaResult?> load() async {
     final url = Uri.parse(
         'https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=1&sort_by=popularity.desc');
     final response = await http.get(url, headers: {
@@ -13,7 +13,7 @@ class RemoteNovelLoading {
 
     if (response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body) as Map;
-      return NovelResult.fromMap(jsonResponse);
+      return MediaResult.fromMap(jsonResponse);
     } else {
       return null;
     }
