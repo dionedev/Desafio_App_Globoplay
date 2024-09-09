@@ -1,4 +1,5 @@
-import 'package:app_movie/data/usecase/remote_load_media.dart';
+import 'package:app_movie/data/usecase/remote_load_movies.dart';
+import 'package:app_movie/data/usecase/remote_load_tv_show.dart';
 import 'package:app_movie/ui/components/carousel.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  RemoteLoadMedia remoteLoadMedia = RemoteLoadMedia();
+  RemoteLoadMovies remoteLoadMovies = RemoteLoadMovies();
+  RemoteLoadTvShow remoteLoadTvShow = RemoteLoadTvShow();
   int selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -20,13 +22,8 @@ class _HomePageState extends State<HomePage> {
     if (index == 1) {
       Navigator.pushNamed(
         context,
-        '/details',
-        arguments: () {
-          setState(() {
-            selectedIndex = 0;
-          });
-        },
-      ); // CORRIGIR O NOME DA PAGINA
+        '/mylist',
+      );
     }
   }
 
@@ -48,18 +45,74 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               FutureBuilder(
-                future: remoteLoadMedia.load(),
+                future: remoteLoadMovies.load(),
                 builder: (context, snapshot) {
-                  final movies = snapshot.data?.results;
-                  return Carousel(
-                    carouselTitle: 'Filmes',
-                    items:
-                        movies?.map((item) => item.fullImageUrl).toList() ?? [],
-                    onNavigate: (int index) {
-                      Navigator.pushNamed(context, '/details',
-                          arguments: movies?[index]);
-                    },
-                  );
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    debugPrint('Erro ao carregar filmes: ${snapshot.error}');
+                    return const Text('');
+                  } else if (!snapshot.hasData ||
+                      snapshot.data?.results?.isEmpty == true) {
+                    debugPrint('Nenhum filme encontrado');
+                    return const Text('');
+                  } else {
+                    final episode = snapshot.data?.results;
+                    final images =
+                        episode?.map((item) => item.fullImageUrl).toList() ??
+                            [];
+
+                    return Carousel(
+                      carouselTitle: 'Filmes',
+                      items: images,
+                      onNavigate: (int index) {
+                        Navigator.pushNamed(
+                          context,
+                          '/details',
+                          arguments: {
+                            'episode': episode?[index],
+                            'images': images,
+                          },
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+              FutureBuilder(
+                future: remoteLoadTvShow.load(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    debugPrint(
+                        'Erro ao carregar programas de tv: ${snapshot.error}');
+                    return const Text('');
+                  } else if (!snapshot.hasData ||
+                      snapshot.data?.results?.isEmpty == true) {
+                    debugPrint('Nenhum programas de tv encontrado');
+                    return const Text('');
+                  } else {
+                    final episode = snapshot.data?.results;
+                    final images =
+                        episode?.map((item) => item.fullImageUrl).toList() ??
+                            [];
+
+                    return Carousel(
+                      carouselTitle: 'TV',
+                      items: images,
+                      onNavigate: (int index) {
+                        Navigator.pushNamed(
+                          context,
+                          '/details',
+                          arguments: {
+                            'episode': episode?[index],
+                            'images': images,
+                          },
+                        );
+                      },
+                    );
+                  }
                 },
               ),
             ],

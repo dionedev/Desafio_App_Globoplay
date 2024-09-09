@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Carousel extends StatefulWidget {
+class Carousel extends StatelessWidget {
   final String carouselTitle;
   final List<String> items;
   final void Function(int index) onNavigate;
@@ -13,48 +13,44 @@ class Carousel extends StatefulWidget {
   });
 
   @override
-  State<Carousel> createState() => _CarouselState();
-}
-
-class _CarouselState extends State<Carousel> {
-  @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 8),
-          child: Text(
-            widget.carouselTitle,
-            style: const TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: Color.fromRGBO(246, 246, 246, 1),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 28),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 8, bottom: 16),
+            child: Text(
+              carouselTitle,
+              style: const TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+                color: Color.fromRGBO(246, 246, 246, 1),
+              ),
             ),
           ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 20),
-          height: 250,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: widget.items.length,
-            itemBuilder: (buildContext, index) {
-              final item = widget.items[index];
-              return GestureDetector(
-                onTap: () {
-                  widget.onNavigate(index);
-                },
-                child: Container(
-                  width: 150,
-                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Image.network(item),
-                ),
-              );
-            },
+          SizedBox(
+            height: 250,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: items.length,
+              itemBuilder: (buildContext, index) {
+                final item = items[index];
+                return GestureDetector(
+                  onTap: () {
+                    onNavigate(index);
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Image.network(item),
+                  ),
+                );
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
